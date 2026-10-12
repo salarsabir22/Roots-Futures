@@ -29,6 +29,7 @@ export function LogoMark({ size = 38 }: { size?: number }) {
 export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span
+      className="logo"
       style={{
         display: "flex",
         alignItems: "center",

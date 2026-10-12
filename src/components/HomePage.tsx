@@ -1,4 +1,4 @@
-import { Logo } from "./Logo";
+import { SiteHeader } from "./SiteHeader";
 import { HeroSvg } from "./HeroSvg";
 import { GrowStorySvg } from "./GrowStorySvg";
 import type { AppState, Occasion } from "@/lib/types";
@@ -31,120 +31,22 @@ export function HomePage({
 }: Props) {
   return (
     <>
-      <header
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          zIndex: 5,
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 16,
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "20px max(32px, calc((100% - 1136px) / 2))",
-          color: "#f6efdc",
-          boxSizing: "border-box",
-        }}
-      >
-        <a href="#top" style={{ display: "flex" }}>
-          <Logo light />
-        </a>
-        <nav
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 28,
-            alignItems: "center",
-            fontWeight: 500,
-          }}
-        >
-          <a href="#ways">Plant now</a>
-          <a href="#how">How it works</a>
-          <a href="#why">Why Karachi</a>
-          <a href="#corporate">Be our partner</a>
-          <a href="#faq">FAQ</a>
-          <a className="btn b1" href="#donate" style={{ padding: "12px 22px", fontSize: 16 }}>
-            Donate
-          </a>
-        </nav>
-      </header>
+      <SiteHeader />
 
-      <section
-        id="top"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          background: "linear-gradient(#0d3b2c, #175a41)",
-          color: "#f6efdc",
-          minHeight: 760,
-          display: "flex",
-          alignItems: "center",
-          padding: "130px max(32px, calc((100% - 1136px) / 2)) 90px",
-          boxSizing: "border-box",
-        }}
-      >
+      <section id="top" className="hero">
         <HeroSvg />
-        <div
-          style={{
-            position: "relative",
-            zIndex: 2,
-            maxWidth: 640,
-            display: "flex",
-            flexDirection: "column",
-            gap: 24,
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontWeight: 700,
-              letterSpacing: 2,
-              color: "#f0b84a",
-              textAlign: "start",
-            }}
-          >
-            KARACHI · SERVICE LEARNING PROJECT
-          </p>
-          <h1
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-fraunces), Fraunces, serif",
-              fontSize: 68,
-              lineHeight: 1.05,
-              textAlign: "start",
-            }}
-          >
-            Plant a tree. Educate a child.
-          </h1>
-          <p
-            style={{
-              margin: 0,
-              fontSize: 22,
-              lineHeight: 1.5,
-              maxWidth: 560,
-              textAlign: "start",
-            }}
-          >
+        <div className="hero__copy">
+          <p className="hero__eyebrow">KARACHI · SERVICE LEARNING PROJECT</p>
+          <h1 className="hero__title">Plant a tree. Educate a child.</h1>
+          <p className="hero__lead">
             Plant it in memory of your marhoom, gift it to someone you love, or simply do
             a good deed for our city. Every tree is planted in Karachi and every donation
             teaches a child.
           </p>
-          <p
-            style={{
-              margin: 0,
-              fontSize: 30,
-              fontFamily: "var(--font-noto-naskh), 'Noto Naskh Arabic', serif",
-              color: "#f0b84a",
-              textAlign: "end",
-            }}
-            dir="rtl"
-          >
+          <p className="hero__urdu" dir="rtl">
             ایک درخت، ایک بچہ، ایک روشن کل
           </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+          <div className="hero__ctas">
             <a className="btn b1" href="#donate">
               Plant a tree
             </a>
@@ -164,7 +66,7 @@ export function HomePage({
             Scroll down and watch a seed grow into a tree.
           </p>
           <div style={{ maxWidth: 420, display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700 }}>
+            <div className="hero__goal-row">
               <span>Our 54-hour goal</span>
               <span>100 trees · 100 children</span>
             </div>
@@ -181,6 +83,7 @@ export function HomePage({
 
       <section
         id="ways"
+        className="page-pad page-section"
         style={{
           padding: "96px 32px",
           display: "flex",
@@ -191,16 +94,7 @@ export function HomePage({
           boxSizing: "border-box",
         }}
       >
-        <h2
-          className="reveal"
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-fraunces), Fraunces, serif",
-            fontSize: 48,
-          }}
-        >
-          Three ways to plant
-        </h2>
+        <h2 className="reveal section-title">Three ways to plant</h2>
         <p style={{ margin: 0, fontSize: 20 }}>
           Every tree costs PKR 3,500 and also pays for one child&apos;s fees.
         </p>
@@ -208,7 +102,7 @@ export function HomePage({
           className="reveal"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
             gap: 24,
           }}
         >
@@ -312,6 +206,7 @@ export function HomePage({
 
       <section
         id="donate"
+        className="page-pad page-section"
         style={{ background: "#e3ecdc", padding: "96px 32px", boxSizing: "border-box" }}
       >
         <div
@@ -323,16 +218,7 @@ export function HomePage({
             gap: 28,
           }}
         >
-          <h2
-            className="reveal"
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-fraunces), Fraunces, serif",
-              fontSize: 48,
-            }}
-          >
-            Donate a tree now
-          </h2>
+          <h2 className="reveal section-title">Donate a tree now</h2>
           <p style={{ margin: 0, fontSize: 20 }}>
             PKR 3,500 plants one tree and pays for one child&apos;s fees. One donation → one
             tree planted → one child educated.
@@ -401,6 +287,7 @@ export function HomePage({
 
       <section
         id="how"
+        className="page-pad page-section"
         style={{
           padding: "96px 32px",
           maxWidth: 1200,
@@ -411,16 +298,7 @@ export function HomePage({
           boxSizing: "border-box",
         }}
       >
-        <h2
-          className="reveal"
-          style={{
-            margin: 0,
-            fontFamily: "var(--font-fraunces), Fraunces, serif",
-            fontSize: 48,
-          }}
-        >
-          Watch your donation grow
-        </h2>
+        <h2 className="reveal section-title">Watch your donation grow</h2>
         <div
           className="story"
           style={{
@@ -450,7 +328,7 @@ export function HomePage({
             ).map(([num, title, desc]) => (
               <div
                 key={num}
-                className="reveal"
+                className="reveal how-step"
                 style={{
                   minHeight: 400,
                   display: "flex",
@@ -460,17 +338,7 @@ export function HomePage({
                   borderTop: "2px solid #d9cba5",
                 }}
               >
-                <p
-                  style={{
-                    margin: 0,
-                    fontFamily: "var(--font-fraunces), Fraunces, serif",
-                    fontSize: 96,
-                    lineHeight: 1,
-                    color: "#3f9b5b",
-                  }}
-                >
-                  {num}
-                </p>
+                <p className="step-num">{num}</p>
                 <h3 style={{ margin: 0, fontSize: 30 }}>{title}</h3>
                 <p style={{ margin: 0, fontSize: 20, lineHeight: 1.5, maxWidth: 460 }}>
                   {desc}
@@ -483,6 +351,7 @@ export function HomePage({
 
       <section
         id="why"
+        className="page-pad page-section"
         style={{
           background: "#0d3b2c",
           color: "#f6efdc",
@@ -499,34 +368,19 @@ export function HomePage({
             gap: 40,
           }}
         >
-          <h2
-            className="reveal"
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-fraunces), Fraunces, serif",
-              fontSize: 48,
-              maxWidth: 760,
-            }}
-          >
+          <h2 className="reveal section-title" style={{ maxWidth: 760 }}>
             Karachi needs shade, and its children need school
           </h2>
           <div
             className="reveal"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
               gap: 24,
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-fraunces), Fraunces, serif",
-                  fontSize: 80,
-                  color: "#f0b84a",
-                }}
-              >
+              <p className="stat-num" style={{ color: "#f0b84a" }}>
                 26.2M
               </p>
               <p style={{ margin: 0, fontSize: 20 }}>
@@ -537,14 +391,7 @@ export function HomePage({
               </svg>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-fraunces), Fraunces, serif",
-                  fontSize: 80,
-                  color: "#f0b84a",
-                }}
-              >
+              <p className="stat-num" style={{ color: "#f0b84a" }}>
                 7.63M
               </p>
               <p style={{ margin: 0, fontSize: 20 }}>of them are in Sindh</p>
@@ -553,14 +400,7 @@ export function HomePage({
               </svg>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-fraunces), Fraunces, serif",
-                  fontSize: 80,
-                  color: "#58c177",
-                }}
-              >
+              <p className="stat-num" style={{ color: "#58c177" }}>
                 &lt;2%
               </p>
               <p style={{ margin: 0, fontSize: 20 }}>
@@ -591,6 +431,7 @@ export function HomePage({
 
       <section
         id="corporate"
+        className="page-pad page-section"
         style={{
           padding: "96px 32px",
           maxWidth: 1200,
@@ -608,20 +449,12 @@ export function HomePage({
               fontWeight: 700,
               letterSpacing: 2,
               color: "#9a5b00",
+              fontSize: "clamp(12px, 3vw, 15px)",
             }}
           >
             FOR COMPANIES AND ORGANISATIONS
           </p>
-          <h2
-            className="reveal"
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-fraunces), Fraunces, serif",
-              fontSize: 48,
-            }}
-          >
-            Plant trees as a company
-          </h2>
+          <h2 className="reveal section-title">Plant trees as a company</h2>
           <p style={{ margin: 0, fontSize: 20, lineHeight: 1.5 }}>
             Show your commitment to sustainability, give your CSR a face and delight your
             employees, partners and customers while a Karachi child learns.
@@ -631,7 +464,7 @@ export function HomePage({
           className="reveal"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
             gap: 24,
           }}
         >
@@ -716,7 +549,7 @@ export function HomePage({
             className="reveal"
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))",
               gap: 16,
             }}
           >
@@ -755,6 +588,7 @@ export function HomePage({
 
       <section
         id="faq"
+        className="page-pad page-section"
         style={{ background: "#fffaf0", padding: "96px 32px", boxSizing: "border-box" }}
       >
         <div
@@ -766,16 +600,7 @@ export function HomePage({
             gap: 24,
           }}
         >
-          <h2
-            className="reveal"
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-fraunces), Fraunces, serif",
-              fontSize: 48,
-            }}
-          >
-            Questions
-          </h2>
+          <h2 className="reveal section-title">Questions</h2>
           <div>
             <h3 style={{ margin: "0 0 8px", fontSize: 22 }}>Where are the trees planted?</h3>
             <p style={{ margin: 0, fontSize: 18, lineHeight: 1.5 }}>
@@ -803,6 +628,7 @@ export function HomePage({
 
       <footer
         id="contact"
+        className="page-pad"
         style={{
           background: "#0a2a1f",
           color: "#f6efdc",
