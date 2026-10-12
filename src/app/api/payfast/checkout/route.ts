@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { PRICE } from "@/lib/types";
 import { buildPayFastCheckout, isPayFastConfigured } from "@/lib/payfast";
 
-export const runtime = "nodejs";
-
 function appOrigin(req: NextRequest) {
   const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "");
   if (fromEnv) return fromEnv;

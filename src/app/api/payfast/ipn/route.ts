@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs";
-
 /**
  * PayFast posts transaction status here (CHECKOUT_URL / IPN).
  * Log the payload for now; wire DB / email once merchant credentials are live.
