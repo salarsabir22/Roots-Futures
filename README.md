@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roots & Futures
 
-## Getting Started
+Next.js landing page for planting trees in Karachi and educating children.
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## PayFast card payments (Pakistan)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Donors can pay by card on checkout via [PayFast](https://gopayfast.com/) hosted checkout (Visa / Mastercard / PayPak / wallets). Card details are entered on PayFast — not on this site.
 
-## Learn More
+### 1. Create a merchant account
 
-To learn more about Next.js, take a look at the following resources:
+1. Sign up: [https://getstarted.apps.net.pk/signup](https://getstarted.apps.net.pk/signup)
+2. Upload docs: **NTN**, **CNIC**, utility bill
+3. After approval, PayFast emails **sandbox** `MERCHANT_ID` + `SECURED_KEY`
+4. Run test payments, then request **live** credentials
+5. Help: `info@gopayfast.com` · `+92 21 37132793`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Fees (typical): ~2.75% local cards, ~3% international (see [pricing](https://gopayfast.com/pricing-payfast/)). No setup fee.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Configure env
 
-## Deploy on Vercel
+```bash
+cp .env.example .env.local
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Fill in:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+PAYFAST_MERCHANT_ID=...
+PAYFAST_SECURED_KEY=...
+PAYFAST_MERCHANT_NAME=Roots and Futures
+PAYFAST_API_URL=https://ipg1.apps.net.pk/Ecommerce/api/
+```
+
+Use your public HTTPS URL for `NEXT_PUBLIC_APP_URL` in production (PayFast redirects need a reachable domain).
+
+### 3. Test
+
+1. `npm run dev`
+2. Checkout → fill name, email, phone → **Pay by card**
+3. Complete payment on PayFast’s page
+4. You return to `/payment/success` or `/payment/failure`
+5. Server notifications land on `POST /api/payfast/ipn` (check server logs)
+
+Bank transfer remains available as a backup on the same checkout page.

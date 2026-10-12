@@ -1,0 +1,80 @@
+import Link from "next/link";
+import { Logo } from "@/components/Logo";
+
+export default async function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ basket?: string }>;
+}) {
+  const { basket } = await searchParams;
+
+  return (
+    <div style={{ background: "#f6efdc", color: "#17332a", minHeight: "100vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 12,
+          padding: "20px max(32px, calc((100% - 1136px) / 2))",
+          background: "#0d3b2c",
+          color: "#f6efdc",
+        }}
+      >
+        <Logo light />
+        <Link className="btn b2" href="/" style={{ padding: "10px 20px", fontSize: 16 }}>
+          Back to home
+        </Link>
+      </div>
+
+      <div
+        style={{
+          maxWidth: 760,
+          margin: "0 auto",
+          padding: "72px 32px 96px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 24,
+          alignItems: "center",
+          textAlign: "center",
+          boxSizing: "border-box",
+        }}
+      >
+        <svg viewBox="0 0 120 120" style={{ width: 120, height: 120 }} aria-hidden>
+          <circle cx="60" cy="60" r="56" fill="#3f9b5b" />
+          <path
+            d="M36 62L53 79L86 44"
+            stroke="#f6efdc"
+            strokeWidth="9"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+          />
+        </svg>
+        <h1
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-fraunces), Fraunces, serif",
+            fontSize: 46,
+            lineHeight: 1.1,
+          }}
+        >
+          Payment received — thank you
+        </h1>
+        <p style={{ margin: 0, fontSize: 20, lineHeight: 1.6 }}>
+          Your card payment was submitted through PayFast. We will plant your tree and send
+          your certificate once the payment settles.
+        </p>
+        {basket && (
+          <p style={{ margin: 0, fontSize: 16, color: "#4a6356" }}>
+            Reference: <b>{basket}</b>
+          </p>
+        )}
+        <Link className="btn b1" href="/">
+          Back to home
+        </Link>
+      </div>
+    </div>
+  );
+}

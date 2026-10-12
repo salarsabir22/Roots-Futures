@@ -1,6 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import { ScreenChrome } from "./ScreenChrome";
 import type { AppState, Occasion } from "@/lib/types";
-import { OCCASIONS } from "@/lib/types";
+import { OCCASIONS, PRICE } from "@/lib/types";
 
 type Props = {
   state: AppState;
@@ -19,6 +22,22 @@ type Props = {
   onHome: () => void;
 };
 
+function submitPayFastForm(actionUrl: string, fields: Record<string, string>) {
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = actionUrl;
+  form.style.display = "none";
+  for (const [key, value] of Object.entries(fields)) {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+
 export function CheckoutPage({
   state,
   summary,
@@ -36,6 +55,54 @@ export function CheckoutPage({
   onHome,
 }: Props) {
   const showRecipient = !state.corp && state.occ !== "karachi";
+  const [cardBusy, setCardBusy] = useState(false);
+  const [cardError, setCardError] = useState("");
+
+  async function payWithCard() {
+    setCardError("");
+    if (!state.name.trim() || !(state.email.trim() || state.phone.trim())) {
+      setCardError("Please add your name and an email or phone number.");
+      return;
+    }
+    if (!state.email.trim()) {
+      setCardError("Email is required for card payments.");
+      return;
+    }
+    if (state.phone.replace(/\D/g, "").length < 10) {
+      setCardError("A valid mobile number is required for card payments.");
+      return;
+    }
+
+    setCardBusy(true);
+    try {
+      const res = await fetch("/api/payfast/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          n: state.n,
+          amount: state.n * PRICE,
+          email: state.email,
+          phone: state.phone,
+          name: state.name,
+          summary,
+          corp: state.corp,
+          org: state.org,
+        }),
+      });
+      const data = (await res.json()) as {
+        error?: string;
+        actionUrl?: string;
+        fields?: Record<string, string>;
+      };
+      if (!res.ok || !data.actionUrl || !data.fields) {
+        throw new Error(data.error || "Could not start PayFast checkout.");
+      }
+      submitPayFastForm(data.actionUrl, data.fields);
+    } catch (err) {
+      setCardError(err instanceof Error ? err.message : "Card payment failed to start.");
+      setCardBusy(false);
+    }
+  }
 
   return (
     <ScreenChrome onHome={onHome}>
@@ -69,7 +136,7 @@ export function CheckoutPage({
             Checkout
           </h1>
           <p style={{ margin: 0, fontSize: 19, lineHeight: 1.5 }}>
-            Tell us who is planting, pay by bank transfer, then share your receipt. We plant
+            Tell us who is planting, then pay by card (PayFast) or bank transfer. We plant
             your tree and a child learns.
           </p>
 
@@ -310,7 +377,40 @@ export function CheckoutPage({
               gap: 18,
             }}
           >
-            <h3 style={{ margin: 0, fontSize: 22 }}>3. Pay by bank transfer</h3>
+            <h3 style={{ margin: 0, fontSize: 22 }}>3. Pay by card</h3>
+            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
+              Visa, Mastercard, PayPak and wallets via PayFast. Card details are entered on
+              PayFast&apos;s secure page — not on this site.
+            </p>
+            <button
+              type="button"
+              className="btn b3"
+              onClick={payWithCard}
+              disabled={cardBusy}
+              style={{
+                textAlign: "center",
+                opacity: cardBusy ? 0.7 : 1,
+              }}
+            >
+              {cardBusy ? "Redirecting to PayFast…" : `Pay ${totalLabel} by card`}
+            </button>
+            {cardError && (
+              <p style={{ margin: 0, color: "#b3261e", fontWeight: 700 }}>{cardError}</p>
+            )}
+          </div>
+
+          <div
+            style={{
+              background: "#fffaf0",
+              border: "2px solid #e3d6b3",
+              borderRadius: 24,
+              padding: 32,
+              display: "flex",
+              flexDirection: "column",
+              gap: 18,
+            }}
+          >
+            <h3 style={{ margin: 0, fontSize: 22 }}>Or pay by bank transfer</h3>
             <div
               style={{
                 background: "#e3ecdc",
