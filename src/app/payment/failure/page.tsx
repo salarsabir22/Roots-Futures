@@ -1,13 +1,26 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
-export default async function PaymentFailurePage({
+async function BasketRef({
   searchParams,
 }: {
   searchParams: Promise<{ basket?: string }>;
 }) {
   const { basket } = await searchParams;
+  if (!basket) return null;
+  return (
+    <p style={{ margin: 0, fontSize: 16, color: "#4a6356" }}>
+      Reference: <b>{basket}</b>
+    </p>
+  );
+}
 
+export default function PaymentFailurePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ basket?: string }>;
+}) {
   return (
     <div style={{ background: "#f6efdc", color: "#17332a", minHeight: "100vh" }}>
       <div
@@ -55,11 +68,9 @@ export default async function PaymentFailurePage({
           Your card was not charged, or the payment was cancelled. You can try again, or pay
           by bank transfer from checkout.
         </p>
-        {basket && (
-          <p style={{ margin: 0, fontSize: 16, color: "#4a6356" }}>
-            Reference: <b>{basket}</b>
-          </p>
-        )}
+        <Suspense fallback={null}>
+          <BasketRef searchParams={searchParams} />
+        </Suspense>
         <Link className="btn b1" href="/">
           Back to home
         </Link>

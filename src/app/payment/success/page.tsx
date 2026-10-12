@@ -1,13 +1,26 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 
-export default async function PaymentSuccessPage({
+async function BasketRef({
   searchParams,
 }: {
   searchParams: Promise<{ basket?: string }>;
 }) {
   const { basket } = await searchParams;
+  if (!basket) return null;
+  return (
+    <p style={{ margin: 0, fontSize: 16, color: "#4a6356" }}>
+      Reference: <b>{basket}</b>
+    </p>
+  );
+}
 
+export default function PaymentSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ basket?: string }>;
+}) {
   return (
     <div style={{ background: "#f6efdc", color: "#17332a", minHeight: "100vh" }}>
       <div
@@ -66,11 +79,9 @@ export default async function PaymentSuccessPage({
           Your card payment was submitted through PayFast. We will plant your tree and send
           your certificate once the payment settles.
         </p>
-        {basket && (
-          <p style={{ margin: 0, fontSize: 16, color: "#4a6356" }}>
-            Reference: <b>{basket}</b>
-          </p>
-        )}
+        <Suspense fallback={null}>
+          <BasketRef searchParams={searchParams} />
+        </Suspense>
         <Link className="btn b1" href="/">
           Back to home
         </Link>
