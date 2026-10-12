@@ -29,19 +29,18 @@ export function LogoMark({ size = 38 }: { size?: number }) {
 export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span
-      className="logo"
+      className={`logo${light ? " logo--light" : ""}`}
       style={{
         display: "flex",
         alignItems: "center",
         gap: 10,
         fontFamily: "var(--font-fraunces), Fraunces, serif",
-        fontSize: 26,
         fontWeight: 800,
         color: light ? "#f6efdc" : undefined,
       }}
     >
       <LogoMark />
-      Roots &amp; Futures
+      <span className="logo__wordmark">Roots &amp; Futures</span>
     </span>
   );
 }
