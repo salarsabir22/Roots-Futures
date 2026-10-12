@@ -12,8 +12,6 @@ type Props = {
   unitLine: string;
   noteLine: string;
   counts: number[];
-  waLink: string;
-  mailLink: string;
   valid: boolean;
   setOcc: (occ: Occasion) => void;
   setCount: (n: number) => void;
@@ -45,8 +43,6 @@ export function CheckoutPage({
   unitLine,
   noteLine,
   counts,
-  waLink,
-  mailLink,
   valid,
   setOcc,
   setCount,
@@ -57,6 +53,47 @@ export function CheckoutPage({
   const showRecipient = !state.corp && state.occ !== "karachi";
   const [cardBusy, setCardBusy] = useState(false);
   const [cardError, setCardError] = useState("");
+  const [receiptFile, setReceiptFile] = useState<File | null>(null);
+  const [receiptBusy, setReceiptBusy] = useState(false);
+  const [receiptError, setReceiptError] = useState("");
+  const [receiptOk, setReceiptOk] = useState("");
+
+  async function uploadReceipt() {
+    setReceiptError("");
+    setReceiptOk("");
+    if (!valid) {
+      setReceiptError("Please add your name and an email or phone number first.");
+      return;
+    }
+    if (!receiptFile) {
+      setReceiptError("Choose a receipt photo or PDF first.");
+      return;
+    }
+
+    setReceiptBusy(true);
+    try {
+      const body = new FormData();
+      body.set("receipt", receiptFile);
+      body.set("name", state.name);
+      body.set("email", state.email);
+      body.set("phone", state.phone);
+      body.set("org", state.org);
+      body.set("recipient", state.recipient);
+      body.set("message", state.message);
+      body.set("summary", summary);
+      body.set("totalLabel", totalLabel);
+
+      const res = await fetch("/api/receipts", { method: "POST", body });
+      const data = (await res.json()) as { error?: string; message?: string; id?: string };
+      if (!res.ok) throw new Error(data.error || "Upload failed.");
+      setReceiptOk(data.message || "Receipt uploaded.");
+      setReceiptFile(null);
+    } catch (err) {
+      setReceiptError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setReceiptBusy(false);
+    }
+  }
 
   async function payWithCard() {
     setCardError("");
@@ -430,32 +467,64 @@ export function CheckoutPage({
               <b>Note:</b> {noteLine}
             </p>
             <p style={{ margin: 0, fontSize: 16, lineHeight: 1.5 }}>
-              Then send your payment receipt or screenshot on WhatsApp <b>03332388072</b> or
-              by email.
+              After you transfer, upload a photo or PDF of your payment receipt here
+              (max 4.5 MB).
             </p>
-            <a
+            <label
+              style={{
+                fontWeight: 700,
+                fontSize: 15,
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+              }}
+            >
+              Payment receipt
+              <input
+                type="file"
+                accept="image/*,.pdf,application/pdf"
+                className="input-field"
+                onChange={(e) => {
+                  setReceiptError("");
+                  setReceiptOk("");
+                  setReceiptFile(e.target.files?.[0] ?? null);
+                }}
+              />
+            </label>
+            {receiptFile && (
+              <p style={{ margin: 0, fontSize: 15, color: "#3e5c4e" }}>
+                Selected: <b>{receiptFile.name}</b>
+              </p>
+            )}
+            <button
+              type="button"
               className="btn b3"
-              href={waLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textAlign: "center" }}
+              onClick={uploadReceipt}
+              disabled={receiptBusy}
+              style={{ textAlign: "center", opacity: receiptBusy ? 0.7 : 1 }}
             >
-              Send receipt on WhatsApp
-            </a>
-            <a
-              className="btn b2c"
-              href={mailLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textAlign: "center" }}
-            >
-              Email the receipt
-            </a>
+              {receiptBusy ? "Uploading…" : "Upload receipt"}
+            </button>
+            {receiptError && (
+              <p style={{ margin: 0, color: "#b3261e", fontWeight: 700 }}>{receiptError}</p>
+            )}
+            {receiptOk && (
+              <p style={{ margin: 0, color: "#14513b", fontWeight: 700 }}>{receiptOk}</p>
+            )}
             <button
               type="button"
               className="btn b1"
-              onClick={onDone}
-              style={{ textAlign: "center", opacity: valid ? 1 : 0.55 }}
+              onClick={() => {
+                if (!receiptOk) {
+                  setReceiptError("Please upload your payment receipt first.");
+                  return;
+                }
+                onDone();
+              }}
+              style={{
+                textAlign: "center",
+                opacity: valid && receiptOk ? 1 : 0.55,
+              }}
             >
               Done
             </button>

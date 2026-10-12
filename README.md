@@ -11,6 +11,23 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Receipt uploads (Vercel Blob)
+
+Bank-transfer receipts are uploaded to **Vercel Blob** (private).
+
+1. In [Vercel](https://vercel.com) → your project → **Storage** → **Create** → **Blob**
+2. Choose **Private** access
+3. Connect the store to this project (adds `BLOB_READ_WRITE_TOKEN`)
+4. Locally:
+   ```bash
+   npx vercel link
+   npx vercel env pull .env.local
+   ```
+   Or paste `BLOB_READ_WRITE_TOKEN` into `.env.local` yourself
+5. Restart `npm run dev` and test checkout → **Upload receipt**
+
+View files anytime in the Vercel dashboard under **Storage → Blob**.
+
 ## PayFast card payments (Pakistan)
 
 Donors can pay by card on checkout via [PayFast](https://gopayfast.com/) hosted checkout (Visa / Mastercard / PayPak / wallets). Card details are entered on PayFast — not on this site.

@@ -2,11 +2,10 @@ import { ScreenChrome } from "./ScreenChrome";
 
 type Props = {
   thanksPara: string;
-  waLink: string;
   onHome: () => void;
 };
 
-export function ThanksPage({ thanksPara, waLink, onHome }: Props) {
+export function ThanksPage({ thanksPara, onHome }: Props) {
   return (
     <ScreenChrome onHome={onHome}>
       <div
@@ -60,22 +59,12 @@ export function ThanksPage({ thanksPara, waLink, onHome }: Props) {
         >
           <h3 style={{ margin: 0, fontSize: 22 }}>What happens next</h3>
           <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6 }}>
-            <b>1.</b> Send your payment receipt on WhatsApp 03332388072 or by email if you
-            have not already.
+            <b>1.</b> We review the payment receipt you uploaded.
             <br />
             <b>2.</b> We confirm your payment and plant your tree.
             <br />
             <b>3.</b> You receive a certificate with your tree&apos;s photo and location.
           </p>
-          <a
-            className="btn b3"
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ textAlign: "center" }}
-          >
-            Send receipt on WhatsApp
-          </a>
         </div>
         <button type="button" className="btn b1" onClick={onHome}>
           Back to home

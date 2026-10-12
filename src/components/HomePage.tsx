@@ -280,7 +280,7 @@ export function HomePage({
           </div>
           <p style={{ margin: 0, fontSize: 16, color: "#3e5c4e" }}>
             You get a certificate with your message, then a photo of your tree with its
-            location. Pay by bank transfer on the next page.
+            location. Pay by card or bank transfer on the next page, then upload your receipt.
           </p>
         </div>
       </section>

@@ -97,8 +97,6 @@ export function RootsFuturesApp() {
           unitLine={derived.unitLine}
           noteLine={derived.noteLine}
           counts={derived.counts}
-          waLink={derived.waLink}
-          mailLink={derived.mailLink}
           valid={derived.valid}
           setOcc={setOcc}
           setCount={setCount}
@@ -110,7 +108,6 @@ export function RootsFuturesApp() {
       {state.screen === "thanks" && (
         <ThanksPage
           thanksPara={derived.thanksPara}
-          waLink={derived.waLink}
           onHome={() => go("home", { corp: false })}
         />
       )}
